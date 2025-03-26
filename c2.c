@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-// Structure to represent a process
+// Structure to store process details
 struct Process {
     int pid;       // Process ID
     int at;        // Arrival Time
@@ -9,16 +9,16 @@ struct Process {
     int ct;        // Completion Time
     int tat;       // Turnaround Time
     int wt;        // Waiting Time
-    bool completed; // To track if the process is completed
+    bool completed; // Flag to check if process is completed
 };
 
-// Function to find the process with the shortest burst time among available processes
+// Function to find the next shortest job available
 int findShortestJob(struct Process p[], int n, int currentTime) {
     int minIndex = -1;
     int minBurstTime = __INT_MAX__;
 
     for (int i = 0; i < n; i++) {
-        if (!p[i].completed && p[i].at <= currentTime) {
+        if (!p[i].completed && p[i].at <= currentTime) { // Select only available processes
             if (p[i].bt < minBurstTime || (p[i].bt == minBurstTime && p[i].at < p[minIndex].at)) {
                 minBurstTime = p[i].bt;
                 minIndex = i;
@@ -43,7 +43,7 @@ void sjfScheduling(struct Process p[], int n) {
         int shortestJob = findShortestJob(p, n, currentTime);
 
         if (shortestJob == -1) {
-            currentTime++; // No process is available, so increment time
+            currentTime++; // No available process, so increment time
             continue;
         }
 
